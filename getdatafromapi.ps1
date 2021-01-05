@@ -59,7 +59,7 @@ $scriptlocation = $jsondata.scriptlocation
 $startupscript = "index.py"
 $lfolder = $jsondata.lfolder
 $lfile = $jsondata.lfile
-$logfile = "$lfolder\$lfile"
+$logfile = "$lfolder/$lfile"
 $searchstring = $jsondata.searchstring
 $trackfolder = $jsondata.trackfolder
 
@@ -132,12 +132,12 @@ else
                 
     echo "$(dt) - Checking python [ $($folder) ] job flag whether job running or not" >> "$logfile"     
 
-    if (!(Test-Path -Path "$($trackfolder)\$($folder).flag"))
+    if (!(Test-Path -Path "$($trackfolder)/$($folder).flag"))
     {
         echo "$(dt) - Python job [ $($folder) ] not running, proceed next" >> "$logfile"     
 
         #Creating folder under download locatoin and downloading the files
-        if (!(Test-Path -Path "$($scriptlocation)\$($folder)"))
+        if (!(Test-Path -Path "$($scriptlocation)/$($folder)"))
         {        
             echo "$(dt) - $folder - Folder not exist, create folder and download the files" >> "$logfile" 
 
@@ -154,7 +154,7 @@ else
                 
                 try
                 {
-                   Invoke-WebRequest -Uri "$downloadURL" -OutFile "$($scriptlocation)\$($folder)\$($scriptname)" -ErrorAction stop
+                   Invoke-WebRequest -Uri "$downloadURL" -OutFile "$($scriptlocation)/$($folder)/$($scriptname)" -ErrorAction stop
                 }
                 catch
                 {
@@ -171,7 +171,7 @@ else
             {
                 try
                 {
-                    Start-Process -FilePath "$($scriptlocation)\$($folder)\$($startupscript)"                
+                    Start-Process -FilePath "$($scriptlocation)/$($folder)/$($startupscript)"                
                 }
                 catch
                 {
@@ -185,21 +185,21 @@ else
                 try
                 {
 
-                    "$($trackfolder)\$($folder).flag"
+                    "$($trackfolder)/$($folder).flag"
 
-                    echo "$(dt) - $($scriptlocation)\$($folder)\$($startupscript)" >> "$logfile"  
+                    echo "$(dt) - $($scriptlocation)/$($folder)/$($startupscript)" >> "$logfile"  
                  
-                    echo "cd $($scriptlocation)\$($folder)\" > "$($trackfolder)\$($folder).ps1"
+                    echo "cd $($scriptlocation)/$($folder)/" > "$($trackfolder)/$($folder).ps1"
                     #$cid = $folder.Substring($folder.get_Length()-2)
 					$cid = ($folder) -replace '.*?(\d+)$','$1'
-				    echo "py $($startupscript) $($cid)" >> "$($trackfolder)\$($folder).ps1"
-                    echo "echo 'Completed' > '$($MyDir)\$($trackfolder)\$($folder).flag'" >> "$($trackfolder)\$($folder).ps1"                                        
-                    echo "" > "$($trackfolder)\$($folder).flag"								
+				    echo "python3 $($startupscript) $($cid)" >> "$($trackfolder)/$($folder).ps1"
+                    echo "echo 'Completed' > '$($MyDir)/$($trackfolder)/$($folder).flag'" >> "$($trackfolder)/$($folder).ps1"                                        
+                    echo "" > "$($trackfolder)/$($folder).flag"								
 				
                     echo "$(dt) - $($folder).flag file created" >> "$logfile"  
               
-                    $argList = "-file `"$($trackfolder)\$($folder).ps1`""
-                    Start-Process powershell -argumentlist $argList
+                    $argList = "-file `"$($trackfolder)/$($folder).ps1`""
+                    Start-Process pwsh -argumentlist $argList
 
                 }
                 catch
@@ -207,7 +207,7 @@ else
                     Write-Warning $Error[0] >> "$logfile" 
                 }
             }
-                echo "$(dt) - Package [ $($trackfolder)\$($folder).ps1 ] triggered sucessfully " >> "$logfile"             
+                echo "$(dt) - Package [ $($trackfolder)/$($folder).ps1 ] triggered sucessfully " >> "$logfile"             
         }
     }
     else

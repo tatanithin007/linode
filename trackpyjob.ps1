@@ -46,7 +46,7 @@ $jsondata = ConvertFrom-Json $jsondata
 
 $lfolder = $jsondata.lfolder
 $lfile = $jsondata.pyjobtracklog
-$logfile = "$lfolder\$lfile"
+$logfile = "$lfolder/$lfile"
 $trackfolder = $jsondata.trackfolder
 $scriptlocation = $jsondata.scriptlocation
 
@@ -65,9 +65,9 @@ Get-ChildItem -Path $trackfolder -Filter *.flag | ForEach-Object {
         Remove-Item -path $_.FullName
         $fname = $_.Name
         $foldername = [io.path]::GetFileNameWithoutExtension($fname)
-        Remove-Item -path "$trackfolder\$foldername.ps1"            
+        Remove-Item -path "$trackfolder/$foldername.ps1"            
         
-        Remove-Item  "$($scriptlocation)\$($foldername)" -Force -Recurse -ErrorAction SilentlyContinue > $null
+        Remove-Item  "$($scriptlocation)/$($foldername)" -Force -Recurse -ErrorAction SilentlyContinue > $null
 
         echo "$(dt) - $($_.name) Job completed and removed all temp files" >> "$logfile"
     }

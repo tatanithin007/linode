@@ -13,6 +13,7 @@ driver.save_screenshot('driver.png')
 
 data=requests.get("https://msbauthentication.com/autocontrol/api/readtelegram.php")
 data=data.json()
+ip=requests.get('https://api.ipify.org').text
 def telegram_bot_sendimage(image_url,purpose_id,phone,msg):
     try:
         purpose_id = int(purpose_id)
@@ -32,4 +33,6 @@ def telegram_bot_sendimage(image_url,purpose_id,phone,msg):
                 bot.send_photo(chat_id=chat_id[i],photo=open(image_url, 'rb'),caption=str(phone)+':'+msg)
     except Exception as e:
         print("error",e)
-telegram_bot_sendimage("driver.png",2,"9493928782","test from linode")
+telegram_bot_sendimage("driver.png",2,ip,"test from linode")
+driver.quit()
+sys.exit()
