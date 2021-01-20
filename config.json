@@ -1,5 +1,5 @@
 {
-    "apiUrl":"https://msbauthentication.com/autocontrol/api/getdevicecampaignuplfile.php?deviceid=linode1",
+    "apiUrl":"https://msbauthentication.com/autocontrol/api/getdevicecampaignuplfile.php?deviceid=aws1",
     "apiKey":"",
 "startupscript":"index.py",
     "scriptlocation":"/files",
